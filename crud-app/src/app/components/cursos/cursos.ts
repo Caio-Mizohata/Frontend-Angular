@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-cursos',
-  imports: [],
+  standalone: true,
   templateUrl: './cursos.html',
-  styleUrl: './cursos.scss',
+  styleUrls: ['./cursos.scss'],
 })
-export class Cursos {}
+export class Cursos {
+  
+}
