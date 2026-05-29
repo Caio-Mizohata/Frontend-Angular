@@ -1,0 +1,12 @@
+[
+  { "id": 1, "name": "Angular", "categoria": "Frontend" },
+  { "id": 2, "name": "React", "categoria": "Frontend" },
+  { "id": 3, "name": "Vue", "categoria": "Frontend" },
+  { "id": 4, "name": "Node", "categoria": "Backend" },
+  { "id": 5, "name": "Django", "categoria": "Backend" },
+  { "id": 6, "name": "Flask", "categoria": "Backend" },
+  { "id": 7, "name": "Spring", "categoria": "Backend" },
+  { "id": 8, "name": "Laravel", "categoria": "Backend" },
+  { "id": 9, "name": "Ruby on Rails", "categoria": "Backend" },
+  { "id": 10, "name": "ASP.NET", "categoria": "Backend" }
+]
