@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, shareReplay } from 'rxjs/operators';
 
 import { AppMaterialModule } from '../../shared/app-material/app-material-module';
 import { ErrorDialog } from '../../shared/components/error-dialog/error-dialog';
@@ -30,12 +30,9 @@ export class Cursos {
       catchError(() => {
         this.onError('Erro ao carregar cursos. Se o problema persistir, contate o suporte.');
         return of([]); // Retorna um array vazio em caso de erro
-      })
+      }),
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
-  }
-
-  cursosMock(): Observable<Curso[]> {
-    return this.cursos$;
   }
 
   onError(errorMsg: string): void {
