@@ -10,11 +10,12 @@ import { AppMaterialModule } from '../../shared/app-material/app-material-module
 import { ErrorDialog } from '../../shared/components/error-dialog/error-dialog';
 import { Curso } from '../../models/curso';
 import { CursoService } from '../../services/curso-service';
+import { CategoryPipe } from '../../shared/pipes/category-pipe';
 
 @Component({
   selector: 'app-cursos',
   standalone: true,
-  imports: [CommonModule, AppMaterialModule, MatProgressSpinnerModule],
+  imports: [CommonModule, AppMaterialModule, MatProgressSpinnerModule, CategoryPipe],
   templateUrl: './cursos.html',
   styleUrls: ['./cursos.scss'],
 })
