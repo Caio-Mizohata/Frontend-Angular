@@ -1,5 +1,4 @@
 export interface Curso {
-  id: number;
-  name: string;
+  nome: string;
   categoria: string;
 }

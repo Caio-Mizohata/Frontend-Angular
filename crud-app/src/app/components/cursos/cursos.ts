@@ -24,7 +24,7 @@ export class Cursos {
   private dialog = inject(MatDialog);
 
   cursos$: Observable<Curso[]>;
-  colunas: string[] = ['id', 'name', 'categoria'];
+  colunas: string[] = ['nome', 'categoria'];
 
   constructor() {
     this.cursos$ = this.cursoService.listar().pipe(

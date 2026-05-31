@@ -1,5 +1,5 @@
-export interface Curso {
-  id: number;
-  name: string;
+export interface ICurso {
+  nome: string;
   categoria: string;
 }
+

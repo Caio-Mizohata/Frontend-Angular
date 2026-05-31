@@ -11,7 +11,7 @@ import { delay, first } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class CursoService {
-  private readonly API_URL = 'assets/cursos.json';
+  private readonly API_URL = 'http://localhost:3000/cursos';
   httpClient = inject(HttpClient);
   constructor() {}
 

@@ -1,9 +1,9 @@
 import { Router } from 'express';
+import CursoController from '../controllers/curso.controller';
 
 const cursoRoutes: Router = Router();
 
-cursoRoutes.get('/', (req, res) => {
-    res.json({ message: 'A Api de cursos ta funcionando!' });
-});
+cursoRoutes.get('/cursos', CursoController.getAllCursos);
+cursoRoutes.post('/cursos', CursoController.createCurso);
 
 export default cursoRoutes;
