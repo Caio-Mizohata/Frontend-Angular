@@ -9,7 +9,10 @@ class CursoController {
     constructor() {
         this.cursoService = CursoService;
         this.getAllCursos = this.getAllCursos.bind(this);
+        this.getCursoById = this.getCursoById.bind(this);
         this.createCurso = this.createCurso.bind(this);
+        this.updateCurso = this.updateCurso.bind(this);
+        this.deleteCurso = this.deleteCurso.bind(this);
     }
 
     public getAllCursos = async (req: Request, res: Response): Promise<void> => {
@@ -25,18 +28,94 @@ class CursoController {
         }
     }
 
+    public getCursoById = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const { id } = req.params;
+            const idNum = Number(id);
+            if (Number.isNaN(idNum)) {
+                res.status(400).json({ message: 'ID inválido' });
+                return;
+            }
+
+            const curso = await this.cursoService.getCursoById(idNum);
+            if (!curso) {
+                res.status(404).json({ message: 'Curso não encontrado' });
+                return;
+            }
+            res.status(200).json(curso);
+        } catch (error) {
+            throw new Error('Erro ao obter o curso: ' + error);
+        }
+    }
+
     public createCurso = async (req: Request, res: Response): Promise<void> => {
         try {
-            const cursoData = CursoSchema.parse(req.body);
-            const { nome, categoria } = cursoData;
+            const cursoData = CursoSchema.safeParse(req.body);
+            if (!cursoData.success) {
+                res.status(400).json({ message: 'Erro na validação dos dados', errors: cursoData.error });
+                return;
+            }
+            const { nome, categoria } = cursoData.data;
             if (!nome || !categoria) {
                 res.status(400).json({ message: 'Nome e categoria são obrigatórios' });
                 return;
             }
-            await this.cursoService.createCurso(cursoData);
+            await this.cursoService.createCurso(cursoData.data);
             res.status(201).json({ message: 'Curso criado com sucesso' });
         } catch (error) {
             res.status(400).json({ message: 'Erro ao criar o curso: ' + error });
+        }
+    }
+
+    public updateCurso = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const { id } = req.params;
+            const idNum = Number(id);
+            if (Number.isNaN(idNum)) {
+                res.status(400).json({ message: 'ID inválido' });
+                return;
+            }
+            const existingCurso = await this.cursoService.getCursoById(idNum);
+            if (!existingCurso) {
+                res.status(404).json({ message: 'Curso não encontrado' });
+                return;
+            }
+
+            const parseResult = CursoSchema.partial().safeParse(req.body);
+            if (!parseResult.success) {
+                res.status(400).json({ message: 'Erro na validação dos dados', errors: parseResult.error });
+                return;
+            }
+            const cursoData = parseResult.data;
+            const { nome, categoria } = cursoData;
+            const updatedData: ICurso = {
+                nome: nome ?? existingCurso.nome,
+                categoria: categoria ?? existingCurso.categoria,
+            };
+            await this.cursoService.updateCurso(idNum, updatedData);
+            res.status(200).json({ message: 'Curso atualizado com sucesso' });
+        } catch (error) {
+            res.status(400).json({ message: 'Erro ao atualizar o curso: ' + error });
+        }
+    }
+
+    public deleteCurso = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const { id } = req.params;
+            const idNum = Number(id);
+            if (Number.isNaN(idNum)) {
+                res.status(400).json({ message: 'ID inválido' });
+                return;
+            }
+            const existingCurso = await this.cursoService.getCursoById(idNum);
+            if (!existingCurso) {
+                res.status(404).json({ message: 'Curso não encontrado' });
+                return;
+            }
+            await this.cursoService.deleteCurso(idNum);
+            res.status(200).json({ message: 'Curso excluído com sucesso' });
+        } catch (error) {
+            res.status(400).json({ message: 'Erro ao excluir o curso: ' + error });
         }
     }
 }
