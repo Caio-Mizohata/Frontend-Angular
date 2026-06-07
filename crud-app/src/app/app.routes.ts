@@ -1,11 +1,13 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  {
-    path: '', pathMatch: 'full', redirectTo: 'cursos',
-  },
+  { path: '', pathMatch: 'full', redirectTo: 'cursos' },
   {
     path: 'cursos',
     loadComponent: () => import('./components/cursos/cursos').then(m => m.Cursos)
-  }
+  },
+  {
+    path: 'new',
+    loadComponent: () => import('./components/curso-forms/curso-forms').then(m => m.CursoForms)
+  },
 ];
