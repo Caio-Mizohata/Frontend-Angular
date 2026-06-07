@@ -11,6 +11,8 @@ import { ErrorDialog } from '../../shared/components/error-dialog/error-dialog';
 import { Curso } from '../../models/curso';
 import { CursoService } from '../../services/curso-service';
 import { CategoryPipe } from '../../shared/pipes/category-pipe';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-cursos',
@@ -22,9 +24,10 @@ import { CategoryPipe } from '../../shared/pipes/category-pipe';
 export class Cursos {
   private cursoService = inject(CursoService);
   private dialog = inject(MatDialog);
+  private router = inject(Router);
 
   cursos$: Observable<Curso[]>;
-  colunas: string[] = ['nome', 'categoria'];
+  colunas: string[] = ['nome', 'categoria', 'actions'];
 
   constructor() {
     this.cursos$ = this.cursoService.listar().pipe(
@@ -40,5 +43,8 @@ export class Cursos {
     this.dialog.open(ErrorDialog, {
       data: errorMsg,
     });
+  }
+  onAdd(): void {
+    this.router.navigateByUrl('/new');
   }
 }
