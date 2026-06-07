@@ -19,7 +19,6 @@ export class CursoService {
     return this.httpClient.get<Curso[]>(this.API_URL).pipe(
       first(), // Garante que a requisição seja feita apenas uma vez
       delay(2000), // Simula um atraso de 2 segundos para demonstrar o spinner
-      tap(cursos => console.log('Cursos listados:', cursos)),
       catchError(error => {
         console.error('Erro ao listar cursos:', error);
         return throwError(() => new Error('Erro ao listar cursos'));
