@@ -1,26 +1,44 @@
-import { Component } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { AppMaterialModule } from "../../shared/app-material/app-material-module";
 import { Curso } from '../../models/curso';
-import { form, required } from '@angular/forms/signals';
-import { MatFormFieldModule}  from '@angular/material/form-field';
+import { CursoService } from '../../services/curso-service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-curso-forms',
-  imports: [ReactiveFormsModule, MatFormFieldModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, AppMaterialModule],
   templateUrl: './curso-forms.html',
-  styleUrl: './curso-forms.scss',
+  styleUrls: ['./curso-forms.scss'],
 })
 export class CursoForms {
+  private cursoService: CursoService = inject(CursoService);
+  private _snackBar = inject(MatSnackBar);
 
-  protected readonly curso = signal<Curso>({
-    nome: '',
-    categoria:'',
+  cursoForm = new FormGroup({
+    nome: new FormControl(''),
+    categoria: new FormControl(''),
   })
 
-  cursoForm = form(this.curso, (schemaPath) => {
-    required(schemaPath.nome, {message: 'O nome é obrigatório'});
-    required(schemaPath.categoria, {message: 'A categoria é obrigatória'});
-  });
+  onSubmit() {
+    return this.cursoService.salvar(this.cursoForm.value as Curso).subscribe({
+      next: (curso) => {
+        console.log('Curso salvo com sucesso:', curso);
+        this.cursoForm.reset();
+      },
+      error: (error) => {
+        console.error('Erro ao salvar curso:', error);
+        this.OnError('Erro ao salvar curso. Se o problema persistir, contate o suporte.');
+      }
+    })
+  }
 
+  private OnError(errorMsg: string) {
+    return this._snackBar.open(errorMsg, 'Fechar', {
+      duration: 5000,
+    });
+  }
 }
