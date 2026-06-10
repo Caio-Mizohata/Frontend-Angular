@@ -25,4 +25,14 @@ export class CursoService {
       })
     )
   }
+
+  salvar(curso: Curso) {
+    return this.httpClient.post<Curso>(this.API_URL, curso).pipe(
+      first(),
+      catchError(error => {
+        console.error('Erro ao salvar curso:', error);
+        return throwError(() => new Error('Erro ao salvar curso'));
+      })
+    );
+  }
 }
