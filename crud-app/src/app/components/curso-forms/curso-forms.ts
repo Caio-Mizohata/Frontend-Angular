@@ -6,6 +6,7 @@ import { AppMaterialModule } from "../../shared/app-material/app-material-module
 import { Curso } from '../../models/curso';
 import { CursoService } from '../../services/curso-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-curso-forms',
@@ -17,23 +18,29 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CursoForms {
   private cursoService: CursoService = inject(CursoService);
   private _snackBar = inject(MatSnackBar);
+  private Location = inject(Location);
 
   cursoForm = new FormGroup({
-    nome: new FormControl(''),
-    categoria: new FormControl(''),
-  })
+    nome: new FormControl<string>('', { nonNullable: true }),
+    categoria: new FormControl<string>('', { nonNullable: true }),
+  });
 
   onSubmit() {
-    return this.cursoService.salvar(this.cursoForm.value as Curso).subscribe({
+    return this.cursoService.salvar(this.cursoForm.value).subscribe({
       next: (curso) => {
         console.log('Curso salvo com sucesso:', curso);
         this.cursoForm.reset();
+        this.OnCancel();
       },
       error: (error) => {
         console.error('Erro ao salvar curso:', error);
         this.OnError('Erro ao salvar curso. Se o problema persistir, contate o suporte.');
       }
     })
+  }
+
+  OnCancel(): void {
+    this.Location.back();
   }
 
   private OnError(errorMsg: string) {
