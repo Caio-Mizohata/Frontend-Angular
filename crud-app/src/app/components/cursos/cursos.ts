@@ -10,14 +10,14 @@ import { AppMaterialModule } from '../../shared/app-material/app-material-module
 import { ErrorDialog } from '../../shared/components/error-dialog/error-dialog';
 import { Curso } from '../../models/curso';
 import { CursoService } from '../../services/curso-service';
-import { CategoryPipe } from '../../shared/pipes/category-pipe';
 import { Router } from '@angular/router';
+import { CursoList } from '../curso-list/curso-list';
 
 
 @Component({
   selector: 'app-cursos',
   standalone: true,
-  imports: [CommonModule, AppMaterialModule, MatProgressSpinnerModule, CategoryPipe],
+  imports: [CommonModule, AppMaterialModule, MatProgressSpinnerModule, CursoList],
   templateUrl: './cursos.html',
   styleUrls: ['./cursos.scss'],
 })
@@ -27,7 +27,7 @@ export class Cursos {
   private router = inject(Router);
 
   cursos$: Observable<Curso[]>;
-  colunas: string[] = ['nome', 'categoria', 'actions'];
+  readonly colunas: string[] = ['nome', 'categoria', 'actions'];
 
   constructor() {
     this.cursos$ = this.cursoService.listar().pipe(

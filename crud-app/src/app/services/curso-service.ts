@@ -26,7 +26,7 @@ export class CursoService {
     )
   }
 
-  salvar(curso: Curso) {
+  salvar(curso: Partial<Curso>): Observable<Curso> {
     return this.httpClient.post<Curso>(this.API_URL, curso).pipe(
       first(),
       catchError(error => {
