@@ -1,6 +1,5 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Curso } from '../../models/curso';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from '../../shared/app-material/app-material-module';
 import { CategoryPipe } from '../../shared/pipes/category-pipe';
@@ -13,12 +12,21 @@ import { CategoryPipe } from '../../shared/pipes/category-pipe';
 })
 export class CursoList {
   @Input() cursos: Curso[] = [];
+  @Output() add = new EventEmitter<boolean>(false);
+  @Output() edit = new EventEmitter<Curso>();
+  @Output() delete = new EventEmitter<Curso>();
+
   readonly colunas: string[] = ['nome', 'categoria', 'actions'];
 
-  private router = inject(Router);
-
-
   onAdd(): void {
-    this.router.navigateByUrl('/new');
+    this.add.emit(true);
+  }
+
+  onEdit(curso: Curso): void {
+    this.edit.emit(curso);
+  }
+
+  onDelete(curso: Curso): void {
+    this.delete.emit(curso);
   }
 }
