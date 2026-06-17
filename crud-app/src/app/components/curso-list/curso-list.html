@@ -17,16 +17,16 @@
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>
-        <button mat-mini-fab color="primary" aria-label="add">
+        <button mat-mini-fab color="primary" aria-label="add" class="add-icon">
           <mat-icon (click)="onAdd()">add</mat-icon>
         </button>
       </th>
       <td mat-cell *matCellDef="let curso">
         <button mat-mini-fab color="accent" class="action-column">
-          <mat-icon>edit</mat-icon>
+          <mat-icon (click)="onEdit(curso)">edit</mat-icon>
         </button>
-        <button mat-mini-fab color="warn">
-          <mat-icon>delete</mat-icon>
+        <button mat-mini-fab color="warn" class="action-column">
+          <mat-icon (click)="onDelete(curso)">delete</mat-icon>
         </button>
       </td>
     </ng-container>
