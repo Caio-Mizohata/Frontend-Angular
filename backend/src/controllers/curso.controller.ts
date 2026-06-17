@@ -142,8 +142,8 @@ class CursoController {
                 return;
             }
             await this.cursoService.deleteCurso(idNum);
-            this.logRequest(req, 200, `Curso excluído: ${existingCurso.nome}`);
-            res.status(200).json({ message: 'Curso excluído com sucesso' });
+            this.logRequest(req, 204, `Curso excluído: ${existingCurso.nome}`);
+            res.status(204).json({ message: 'Curso excluído com sucesso' });
         } catch (error) {
             this.logRequest(req, 500, 'Erro ao excluir o curso');
             res.status(400).json({ message: 'Erro ao excluir o curso: ' + error });
