@@ -7,7 +7,7 @@
     @if (cursos$ | async; as cursos) {
 
       @if (cursos.length > 0) {
-        <app-curso-list [cursos]="cursos"></app-curso-list>
+        <app-curso-list [cursos]="cursos" (add)="onAdd()" (edit)="onEdit($event)" (delete)="onDelete($event)"></app-curso-list>
       }
 
     } @else {
