@@ -13,7 +13,7 @@ import { Curso } from '../../models/curso';
 import { CursoService } from '../../services/curso-service';
 import { Router } from '@angular/router';
 import { CursoList } from '../curso-list/curso-list';
-
+import { ConfirmationDialogue } from '../confirmation-dialogue/confirmation-dialogue';
 
 @Component({
   selector: 'app-cursos',
@@ -28,7 +28,7 @@ export class Cursos {
   private router = inject(Router);
   private _snackBar = inject(MatSnackBar);
 
-  cursos$: Observable<Curso[]>;
+  cursos$: Observable<Curso[] | null> = of(null);
   readonly colunas: string[] = ['nome', 'categoria', 'actions'];
 
   constructor() {
@@ -50,17 +50,30 @@ export class Cursos {
     );
   }
 
-    onDelete(curso: Curso): void {
-    this.cursoService.delete(curso.id!).subscribe({
-      next: () => {
-        this.refresh();
-        this._snackBar.open('Curso excluído com sucesso.', 'Fechar', {
-          duration: 5000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center',
-        });
+  onDelete(curso: Curso): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogue, {
+      data: {
+        titulo: 'Confirmar Exclusão',
+        mensagem: 'Tem certeza que deseja excluir o curso?',
+        confirmButtonText: 'Excluir',
+        cancelButtonText: 'Cancelar'
       },
-      error: this.onError.bind(this, 'Erro ao excluir curso. Se o problema persistir, contate o suporte.'),
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.cursoService.delete(curso.id!).subscribe({
+          next: () => {
+            this.refresh();
+            this._snackBar.open('Curso excluído com sucesso.', 'Fechar', {
+              duration: 5000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center',
+            });
+          },
+          error: () => this.onError('Erro ao excluir curso. Tente novamente.'),
+        });
+      }
     });
   }
 
